@@ -6,22 +6,29 @@ contract Transaction {
     string public symbol;       /*tokenの単位*/
     uint8 public decimals;      /*小数点以下の桁数*/
     uint256 public totalSupply; /*tokenの総量*/
+    bool public gameResult;
     mapping(address => uint256) public balanceOf; /*各アドレスの残高*/
+
+    address player = msg.sender;
+    address dealer = "0xc289e22143536dB9e0556d87E45dC17cF3f84aCD";
 
     /*イベント通知*/
     event Transfer(address indexed from, address indexed to, uint256 value);
 
     /*コンストラクタ*/
-    constructor(uint256 _supply, string memory _name, string memory _symbol, uint8 _decimals)public{
-        balanceOf[msg.sender] = _supply;
+    constructor(uint256 _supply, string memory _name, string memory _symbol, uint8 _decimals, bool _gameResult)public{
+        balanceOf[player] = _supply;
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
         totalSupply = _supply;
+        gameResult = _gameResult;
     }
 
     /*送金*/
-    function transfer(address _to, uint256 _value) public {
+    function transfer(address _from, address _to, uint256 _value) public {
+
+
         /*不正送金チェック*/
         if (balanceOf[msg.sender] < _value) revert();
         if (balanceOf[_to] + _value < balanceOf[_to]) revert();
