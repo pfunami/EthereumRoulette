@@ -25,7 +25,7 @@ contract Num {
         uint dividend;
     }
 
-    struct Num {
+    struct Outside {
         outsideBet range;
         outsideBet color;
         outsideBet odd_even;
@@ -33,11 +33,17 @@ contract Num {
         outsideBet column;
     }
 
-    Num[36] public Nums;
+    Outside[36] public outNums;
+    insideBet[36] public inNums;
 
     function initOutside() public {
         for (uint num = 0; num <= 36; num++) {
-            Num memory number;
+            //inside
+            inNums[num].dividend = 36;
+            inNums[num].type = "Straight Up";
+
+            //outside
+            Outside memory number;
             /*range*/
             number.range.dividend = 3;
             if (num == 0) {
@@ -85,6 +91,7 @@ contract Num {
                 number.high_low.type = "HIGH";
             }
             /*column*/
+            number.column.dividend = 3;
             if (num == 0) {
                 number.column.type = "none";
             } else if (num % 3 == 0) {
@@ -94,7 +101,7 @@ contract Num {
             } else {
                 number.column.type = "pat3";
             }
-            Nums[num] = number;
+            outNums[num] = number;
         }
     }
 }
