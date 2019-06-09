@@ -6,7 +6,7 @@ contract Environment {
     address public player;
 
     constructor(address _player)public{
-        dealer = "0xc289e22143536dB9e0556d87E45dC17cF3f84aCD";
+        dealer = 0xc289e22143536dB9e0556d87E45dC17cF3f84aCD;
         player = msg.sender;
     }
 }
@@ -16,16 +16,18 @@ contract Num {
     Num[36] public Nums;
 
     struct Num {
-        string strNum;
+        uint8 num;
+        string range;
         string color;
         string odd_even;
         string high_low;
     }
 
-    function init(){
-        for (int num = 0; num <= 36; num++) {
+
+    function init()public{
+        for (uint8 num = 0; num <= 36; num++) {
             Num memory number;
-            number.strNum = string(num);
+            number.num = num;
             /*range*/
             if (num == 0) {
                 number.range = "ZERO";
@@ -39,7 +41,7 @@ contract Num {
             /*color*/
             if (num == 0) {
                 number.color = "none";
-            } else if (num / 10 = 0 || num / 10 = 2) {
+            } else if (num / 10 == 0 || num / 10 == 2) {
                 if (num % 2 == 1 && num != 29) {
                     number.color = "RED";
                 } else {
@@ -80,22 +82,22 @@ contract RandomNumberOraclized is usingOraclize {
     uint public randomNumber;
     bytes32 public request_id;
 
-    function RandomNumberOraclized() {
-        // (1) Oraclize Address Resolver の読み込み
-        // <OARアドレスを指定。deterministic OAR の場合、この行の指定は必要ない
-        // OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
-    }
+    //function RandomNumberOraclized() public{
+    // (1) Oraclize Address Resolver の読み込み
+    // <OARアドレスを指定。deterministic OAR の場合、この行の指定は必要ない
+    //OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
+    //}
 
-    function request() {
+    function request() public{
         // (2) OraclizeへWolframAlphaによる計算を依頼
-        // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
+        // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
         request_id = oraclize_query("WolframAlpha", "random number between 0 and 36");
     }
 
-    // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
-    function __callback(bytes32 request_id, string result) {
+    // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
+    function __callback(bytes32 request_id, string memory result) public{
         if (msg.sender != oraclize_cbAddress()) {
-            throw;
+            revert();
         }
 
         // (4) 実行結果resultをdrawnNumberへ保存
@@ -121,7 +123,7 @@ contract Transaction {
 
     /*コンストラクタ*/
     constructor(uint256 _supply, string memory _name, string memory _symbol, uint8 _decimals, bool _gameResult)public{
-        balanceOf[player] = _supply;
+        balanceOf[msg.sender] = _supply;
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
