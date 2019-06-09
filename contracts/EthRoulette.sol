@@ -11,64 +11,88 @@ contract Environment {
     }
 }
 
+
 contract Num {
+
+    struct outsideBet {
+        uint num;
+        string type;
+        uint dividend;
+    }
+
+    struct insideBet {
+        string type;
+        uint dividend;
+    }
+
+    struct Num {
+        outsideBet range;
+        outsideBet color;
+        outsideBet odd_even;
+        outsideBet high_low;
+        outsideBet column;
+    }
 
     Num[36] public Nums;
 
-    struct Num {
-        uint8 num;
-        string range;
-        string color;
-        string odd_even;
-        string high_low;
-    }
-
-
-    function init()public{
-        for (uint8 num = 0; num <= 36; num++) {
+    function initOutside() public {
+        for (uint num = 0; num <= 36; num++) {
             Num memory number;
-            number.num = num;
             /*range*/
+            number.range.dividend = 3;
             if (num == 0) {
-                number.range = "ZERO";
+                number.range.type = "ZERO";
             } else if (num <= 12) {
-                number.range = "SMALL";
+                number.range.type = "SMALL";
             } else if (num <= 24) {
-                number.range = "MEDIUM";
+                number.range.type = "MEDIUM";
             } else if (num <= 36) {
-                number.range = "LARGE";
+                number.range.type = "LARGE";
             }
             /*color*/
+            number.color.dividend = 2;
             if (num == 0) {
-                number.color = "none";
+                number.color.type = "none";
             } else if (num / 10 == 0 || num / 10 == 2) {
                 if (num % 2 == 1 && num != 29) {
-                    number.color = "RED";
+                    number.color.type = "RED";
                 } else {
-                    number.color = "BLACK";
+                    number.color.type = "BLACK";
                 }
             } else {
                 if ((num % 2 == 0 && num != 10) || num == 19) {
-                    number.color = "RED";
+                    number.color.type = "RED";
                 } else {
-                    number.color = "BLACK";
+                    number.color.type = "BLACK";
                 }
             }
             /*odd_even*/
+            number.odd_even.dividend = 2;
             if (num == 0) {
-                number.odd_even = "none";
+                number.odd_even.type = "none";
             } else if (num % 2 == 1) {
-                number.odd_even = "ODD";
+                number.odd_even.type = "ODD";
             } else {
-                number.odd_even = "EVEN";
+                number.odd_even.type = "EVEN";
             }
             /*high_low*/
+            number.high_low.dividend = 2;
             if (num == 0) {
-                number.high_low = "none";
+                number.high_low.type = "none";
             } else if (num <= 18) {
-                number.high_low = "LOW";
+                number.high_low.type = "LOW";
             } else {
-                number.high_low = "HIGH";
+                number.high_low.type = "HIGH";
+            }
+            /*column*/
+            if (num == 0) {
+                number.column.type = "none";
+            } else if (num % 3 == 0) {
+                number.column.type = "pat1";
+            } else if (num % 3 == 1) {
+                number.column.type = "pat2";
+            } else {
+                number.column.type = "pat3";
             }
             Nums[num] = number;
         }
@@ -88,14 +112,14 @@ contract RandomNumberOraclized is usingOraclize {
     //OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
     //}
 
-    function request() public{
+    function request() public {
         // (2) OraclizeへWolframAlphaによる計算を依頼
         // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
         request_id = oraclize_query("WolframAlpha", "random number between 0 and 36");
     }
 
     // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
-    function __callback(bytes32 request_id, string memory result) public{
+    function __callback(bytes32 request_id, string memory result) public {
         if (msg.sender != oraclize_cbAddress()) {
             revert();
         }
@@ -110,7 +134,7 @@ contract Play {
 
 }
 
-contract Transaction {
+contract Transaction is Num {
     /*状態変数の宣言*/
     string public name;         /*tokenの名前*/
     string public symbol;       /*tokenの単位*/
