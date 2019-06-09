@@ -11,52 +11,109 @@ contract Environment {
     }
 }
 
-//乱数生成
-contract RandomNumber {
-    uint public numberMax = 36;
+contract Num {
 
-    struct draw {
-        uint blockNumber;
+    struct Num {
+        string memory strNum;
+        string memory color;
+        string memory odd_even;
+        string memory high_low;
     }
 
-    struct draws {
-        uint numDraws;
-        mapping(uint => draw) draws;
+    mapping(uint8 => Num) public NumMap;
+
+    function init(uint8 num){
+
     }
 
-    mapping(address => draws) requests;
-
-    event ReturnNextIndex(uint _index);
-
-    function request() public returns (uint) {
-        uint _nextIndex = requests[msg.sender].numDraws;
-        requests[msg.sender].draws[_nextIndex].blockNumber = block.number;
-        requests[msg.sender].numDraws = _nextIndex + 1;
-        ReturnNextIndex(_nextIndex);
-        return _nextIndex;
-    }
-
-    // (1) デバッグ用に、blockhashとseed値を返すように変更
-    function get(uint _index) public view returns (int status, uint drawnNumber){
-        if (_index >= requests[msg.sender].numDraws) {
-            return (- 2, 0);
-        } else {
-            uint _nextBlockNumber = requests[msg.sender].draws[_index].blockNumber + 1;
-            if (_nextBlockNumber >= block.number) {
-                return (- 1, 0);
+    string public strNum;
+    mapping(uint8 => string) public range;
+    mapping(uint8 => string) public color;
+    mapping(uint8 => string) public odd_even;
+    mapping(uint8 => string) public high_low;
+    constructor(uint8 num)public{
+        strNum = string(num);
+        /*range*/
+        if (num == 0) {
+            range[num] = "ZERO";
+        } else if (num <= 12) {
+            range[num] = "SMALL";
+        } else if (num <= 24) {
+            range[num] = "MEDIUM";
+        } else if (num <= 36) {
+            range[num] = "LARGE";
+        }
+        /*color*/
+        if (num == 0) {
+            color[num] = "none";
+        } else if (num / 10 = 0 || num / 10 = 2) {
+            if (num % 2 == 1 && num != 29) {
+                color[num] = "RED";
             } else {
-                bytes32 _blockhash = block.blockhash(_nextBlockNumber);
-                // (2) ブロックハッシュ値、ユーザのアドレス、予約番号を元にseed値を計算
-                bytes32 _seed = sha256(_blockhash, msg.sender, _index);
-                // (3) seed値を元に乱数を計算 0~36
-                uint _drawnNumber = uint(_seed) % (numberMax + 1);
-                // (4) 計算された乱数を返す
-                return (0, _drawnNumber);
+                color[num] = "BLACK";
+            }
+        } else {
+            if ((num % 2 == 0 && num != 10) || num == 19) {
+                color[num] = "RED";
+            } else {
+                color[num] = "BLACK";
             }
         }
+        /*odd_even*/
+        if (num == 0) {
+            odd_even[num] = "none";
+        } else if (num % 2 == 1) {
+            odd_even[num] = "ODD";
+        } else {
+            odd_even[num] = "EVEN";
+        }
+        /*high_low*/
+        if (num == 0) {
+            high_low[num] = "none";
+        } else if (num <= 18) {
+            high_low[num] = "LOW";
+        } else {
+            high_low[num] = "HIGH";
+        }
+
+    }
+
+}
+
+//乱数生成
+import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
+
+contract RandomNumberOraclized is usingOraclize {
+    uint public randomNumber;
+    bytes32 public request_id;
+
+    function RandomNumberOraclized() {
+        // (1) Oraclize Address Resolver の読み込み
+        // <OARアドレスを指定。deterministic OAR の場合、この行の指定は必要ない
+        // OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
+    }
+
+    function request() {
+        // (2) OraclizeへWolframAlphaによる計算を依頼
+        // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
+        request_id = oraclize_query("WolframAlpha", "random number between 0 and 36");
+    }
+
+    // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
+    function __callback(bytes32 request_id, string result) {
+        if (msg.sender != oraclize_cbAddress()) {
+            throw;
+        }
+
+        // (4) 実行結果resultをdrawnNumberへ保存
+        randomNumber = parseInt(result);
     }
 }
 
+
+contract Play {
+
+}
 
 contract Transaction {
     /*状態変数の宣言*/
