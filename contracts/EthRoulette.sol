@@ -13,71 +13,64 @@ contract Environment {
 
 contract Num {
 
+    Num[36] public Nums;
+
     struct Num {
-        string memory strNum;
-        string memory color;
-        string memory odd_even;
-        string memory high_low;
+        string strNum;
+        string color;
+        string odd_even;
+        string high_low;
     }
 
-    mapping(uint8 => Num) public NumMap;
-
-    function init(uint8 num){
-
-    }
-
-    string public strNum;
-    mapping(uint8 => string) public range;
-    mapping(uint8 => string) public color;
-    mapping(uint8 => string) public odd_even;
-    mapping(uint8 => string) public high_low;
-    constructor(uint8 num)public{
-        strNum = string(num);
-        /*range*/
-        if (num == 0) {
-            range[num] = "ZERO";
-        } else if (num <= 12) {
-            range[num] = "SMALL";
-        } else if (num <= 24) {
-            range[num] = "MEDIUM";
-        } else if (num <= 36) {
-            range[num] = "LARGE";
-        }
-        /*color*/
-        if (num == 0) {
-            color[num] = "none";
-        } else if (num / 10 = 0 || num / 10 = 2) {
-            if (num % 2 == 1 && num != 29) {
-                color[num] = "RED";
-            } else {
-                color[num] = "BLACK";
+    function init(){
+        for (int num = 0; num <= 36; num++) {
+            Num memory number;
+            number.strNum = string(num);
+            /*range*/
+            if (num == 0) {
+                number.range = "ZERO";
+            } else if (num <= 12) {
+                number.range = "SMALL";
+            } else if (num <= 24) {
+                number.range = "MEDIUM";
+            } else if (num <= 36) {
+                number.range = "LARGE";
             }
-        } else {
-            if ((num % 2 == 0 && num != 10) || num == 19) {
-                color[num] = "RED";
+            /*color*/
+            if (num == 0) {
+                number.color = "none";
+            } else if (num / 10 = 0 || num / 10 = 2) {
+                if (num % 2 == 1 && num != 29) {
+                    number.color = "RED";
+                } else {
+                    number.color = "BLACK";
+                }
             } else {
-                color[num] = "BLACK";
+                if ((num % 2 == 0 && num != 10) || num == 19) {
+                    number.color = "RED";
+                } else {
+                    number.color = "BLACK";
+                }
             }
+            /*odd_even*/
+            if (num == 0) {
+                number.odd_even = "none";
+            } else if (num % 2 == 1) {
+                number.odd_even = "ODD";
+            } else {
+                number.odd_even = "EVEN";
+            }
+            /*high_low*/
+            if (num == 0) {
+                number.high_low = "none";
+            } else if (num <= 18) {
+                number.high_low = "LOW";
+            } else {
+                number.high_low = "HIGH";
+            }
+            Nums[num] = number;
         }
-        /*odd_even*/
-        if (num == 0) {
-            odd_even[num] = "none";
-        } else if (num % 2 == 1) {
-            odd_even[num] = "ODD";
-        } else {
-            odd_even[num] = "EVEN";
-        }
-        /*high_low*/
-        if (num == 0) {
-            high_low[num] = "none";
-        } else if (num <= 18) {
-            high_low[num] = "LOW";
-        } else {
-            high_low[num] = "HIGH";
-        }
-
     }
-
 }
 
 //乱数生成
