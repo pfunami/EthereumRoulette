@@ -5,7 +5,7 @@ contract Environment {
     address public dealer;
     address public player;
 
-    constructor(address _player)public{
+    function setPlayer() public {
         dealer = 0xc289e22143536dB9e0556d87E45dC17cF3f84aCD;
         player = msg.sender;
     }
@@ -34,9 +34,9 @@ contract Num {
     }
 
     Outside[36] public outNums;
-    insideBet[36] public inNums;
+    insideBet[36] public inNums;    //将来的に枠線上ルールを設置
 
-    function initOutside() public {
+    function init() public {
         for (uint num = 0; num <= 36; num++) {
             //inside
             inNums[num].dividend = 36;
@@ -137,8 +137,19 @@ contract RandomNumberOraclized is usingOraclize {
 }
 
 
-contract Play {
+contract Play is Environment, Transaction {
+    uint256 public chip;
+    /*イベント通知*/
+    event GetChip(uint256 getChip, uint256 allChip);
 
+    function buyChip(uint256 val){
+        /*不正送金チェック*/
+        if (balanceOf[player] < _value) revert();
+        if (balanceOf[dealer] + _value < balanceOf[dealer]) revert();
+        transfer(player, dealer, val);
+        chip += val;
+        emit GetChip(val, chip);
+    }
 }
 
 contract Transaction is Num {
@@ -163,7 +174,6 @@ contract Transaction is Num {
 
     /*送金*/
     function transfer(address _from, address _to, uint256 _value) public {
-
 
         /*不正送金チェック*/
         if (balanceOf[msg.sender] < _value) revert();
