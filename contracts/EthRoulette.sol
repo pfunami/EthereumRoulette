@@ -1,4 +1,5 @@
 pragma solidity ^0.5.8;
+pragma experimental ABIEncoderV2;
 
 //ディーラーとプレイヤー
 contract Environment {
@@ -12,16 +13,16 @@ contract Environment {
 }
 
 
-contract Num {
+contract Num{
 
     struct outsideBet {
         uint num;
-        string type;
+        string kind;
         uint256 dividend;
     }
 
     struct insideBet {
-        string type;
+        string kind;
         uint256 dividend;
     }
 
@@ -36,69 +37,69 @@ contract Num {
     Outside[36] public outNums;
     insideBet[36] public inNums;    //将来的に枠線上ルールを設置
 
-    function init(int num) public {
+    function init(uint num) public {
         //inside
         inNums[num].dividend = 36;
-        inNums[num].type = "Straight Up";
+        inNums[num].kind = "Straight Up";
 
         //outside
         Outside memory number;
         /*range*/
         number.range.dividend = 3;
         if (num == 0) {
-            number.range.type = "ZERO";
+            number.range.kind = "ZERO";
         } else if (num <= 12) {
-            number.range.type = "SMALL";
+            number.range.kind = "SMALL";
         } else if (num <= 24) {
-            number.range.type = "MEDIUM";
+            number.range.kind = "MEDIUM";
         } else if (num <= 36) {
-            number.range.type = "LARGE";
+            number.range.kind = "LARGE";
         }
         /*color*/
         number.color.dividend = 2;
         if (num == 0) {
-            number.color.type = "none";
+            number.color.kind = "none";
         } else if (num / 10 == 0 || num / 10 == 2) {
             if (num % 2 == 1 && num != 29) {
-                number.color.type = "RED";
+                number.color.kind = "RED";
             } else {
-                number.color.type = "BLACK";
+                number.color.kind = "BLACK";
             }
         } else {
             if ((num % 2 == 0 && num != 10) || num == 19) {
-                number.color.type = "RED";
+                number.color.kind = "RED";
             } else {
-                number.color.type = "BLACK";
+                number.color.kind = "BLACK";
             }
         }
         /*odd_even*/
         number.odd_even.dividend = 2;
         if (num == 0) {
-            number.odd_even.type = "none";
+            number.odd_even.kind = "none";
         } else if (num % 2 == 1) {
-            number.odd_even.type = "ODD";
+            number.odd_even.kind = "ODD";
         } else {
-            number.odd_even.type = "EVEN";
+            number.odd_even.kind = "EVEN";
         }
         /*high_low*/
         number.high_low.dividend = 2;
         if (num == 0) {
-            number.high_low.type = "none";
+            number.high_low.kind = "none";
         } else if (num <= 18) {
-            number.high_low.type = "LOW";
+            number.high_low.kind = "LOW";
         } else {
-            number.high_low.type = "HIGH";
+            number.high_low.kind = "HIGH";
         }
         /*column*/
         number.column.dividend = 3;
         if (num == 0) {
-            number.column.type = "none";
+            number.column.kind = "none";
         } else if (num % 3 == 0) {
-            number.column.type = "pat1";
+            number.column.kind = "pat1";
         } else if (num % 3 == 1) {
-            number.column.type = "pat2";
+            number.column.kind = "pat2";
         } else {
-            number.column.type = "pat3";
+            number.column.kind = "pat3";
         }
         outNums[num] = number;
 
@@ -134,81 +135,6 @@ contract RandomNumberOraclized is usingOraclize {
 
         // (4) 実行結果resultをdrawnNumberへ保存
         randomNumber = parseInt(result);
-    }
-}
-
-
-contract Play is Environment, Transaction {//transactionがnumを継承
-    struct betInfo {
-        string type;
-        uint256 betVal;
-        int nun;
-    }
-
-    betInfo bet_info;
-    betInfo[] betInfos;
-    /*イベント通知*/
-    event GetChip(uint256 getChip, uint256 allChip, uint256 value);
-    event ExchangeChip(uint256 exchangeChip, uint256 allChip, uint256 value);
-
-    function buyChip(uint256 _val) public {
-        if (transfer(player, dealer, _val)) {
-            chip += _val;
-            emit GetChip(_val, chip, balanceOf[player]);
-        }
-    }
-
-    function exchangeChip(uint256 _exChip) public {
-        if (_exChip <= chip && transfer(dealer, player, _exChip)) {
-            chip -= _exChip;
-            emit ExchangeChip(_exChip, chip, balanceOf[player]);
-        }
-    }
-
-    function betOut(string memory place, int number, uint256 betVal) public {//t=in,f=out
-        bet_info.type = place;
-        bet_info.betVal = betVal;
-        bet_info.num = number;
-        betInfos.push(bet_info);
-    }
-
-    function isSameString(string memory _origin, string memory _target) public pure returns (bool) {
-        return keccak256(abi.encodePacked(_origin)) == keccak256(abi.encodePacked(_target));
-    }
-
-    function try(int _ranNum) public {
-        init(_ranNum);
-        bool profits = false;
-        for (int i = 0; betInfos.length; i++) {
-            if (isSameString(outNums[_ranNum].range.type, betInfos[i].type)) {
-                profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].range.dividend;
-            }
-            if (isSameString(outNums[_ranNum].high_low.type, betInfos[i].type)) {
-                profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].high_low.dividend;
-            }
-            if (isSameString(outNums[_ranNum].odd_even.type, betInfos[i].type)) {
-                profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].odd_even.dividend;
-            }
-            if (isSameString(outNums[_ranNum].color.type, betInfos[i].type)) {
-                profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].color.dividend;
-            }
-            if (isSameString(outNums[_ranNum].column.type, betInfos[i].type)) {
-                profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].column.dividend;
-            }
-            if (_ranNum == betInfos[i].num) {
-                profits = true;
-                chip += betInfos[i].betVal * inNums[_ranNum].dividend;
-            }
-
-            if (!profits) {
-                chip -= betInfos[i].betVal;
-            }
-        }
     }
 }
 
@@ -254,5 +180,79 @@ contract Transaction is Num {
         /*イベント通知*/
         emit Transfer(msg.sender, _to, _value);
         return true;
+    }
+}
+
+contract Play is Environment, Transaction { //transactionがnumを継承
+    struct betInfo {
+        string kind;
+        uint256 betVal;
+        uint num;
+    }
+
+    betInfo bet_info;
+    betInfo[] betInfos;
+    /*イベント通知*/
+    event GetChip(uint256 getChip, uint256 allChip, uint256 value);
+    event ExchangeChip(uint256 exchangeChip, uint256 allChip, uint256 value);
+
+    function buyChip(uint256 _val) public {
+        if (transfer(player, dealer, _val)) {
+            chip += _val;
+            emit GetChip(_val, chip, balanceOf[player]);
+        }
+    }
+
+    function exchangeChip(uint256 _exChip) public {
+        if (_exChip <= chip && transfer(dealer, player, _exChip)) {
+            chip -= _exChip;
+            emit ExchangeChip(_exChip, chip, balanceOf[player]);
+        }
+    }
+
+    function betOut(string memory place, uint number, uint256 betVal) public {//t=in,f=out
+        bet_info.kind = place;
+        bet_info.betVal = betVal;
+        bet_info.num = number;
+        betInfos.push(bet_info);
+    }
+
+    function isSameString(string memory _origin, string memory _target) public pure returns (bool) {
+        return keccak256(abi.encodePacked(_origin)) == keccak256(abi.encodePacked(_target));
+    }
+
+    function payOut(uint _ranNum) public {
+        init(_ranNum);
+        bool profits = false;
+        for (uint i = 0; i<betInfos.length; i++) {
+            if (isSameString(outNums[_ranNum].range.kind, betInfos[i].kind)) {
+                profits = true;
+                chip += betInfos[i].betVal * outNums[_ranNum].range.dividend;
+            }
+            if (isSameString(outNums[_ranNum].high_low.kind, betInfos[i].kind)) {
+                profits = true;
+                chip += betInfos[i].betVal * outNums[_ranNum].high_low.dividend;
+            }
+            if (isSameString(outNums[_ranNum].odd_even.kind, betInfos[i].kind)) {
+                profits = true;
+                chip += betInfos[i].betVal * outNums[_ranNum].odd_even.dividend;
+            }
+            if (isSameString(outNums[_ranNum].color.kind, betInfos[i].kind)) {
+                profits = true;
+                chip += betInfos[i].betVal * outNums[_ranNum].color.dividend;
+            }
+            if (isSameString(outNums[_ranNum].column.kind, betInfos[i].kind)) {
+                profits = true;
+                chip += betInfos[i].betVal * outNums[_ranNum].column.dividend;
+            }
+            if (_ranNum == betInfos[i].num) {
+                profits = true;
+                chip += betInfos[i].betVal * inNums[_ranNum].dividend;
+            }
+
+            if (!profits) {
+                chip -= betInfos[i].betVal;
+            }
+        }
     }
 }
