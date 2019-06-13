@@ -1,8 +1,11 @@
 pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
+/*　やっぱ乱数発生の指示はjsから出し、乱数生成自体は別言語で書いてそれを呼び出し、それをsolidityに渡すようにしようかな... */
+//乱数生成
+//import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
 //ディーラーとプレイヤー
-contract Environment {
+contract EthRoulette{
     address public dealer;
     address public player;
 
@@ -10,10 +13,7 @@ contract Environment {
         dealer = 0xc289e22143536dB9e0556d87E45dC17cF3f84aCD;
         player = msg.sender;
     }
-}
 
-
-contract Num{
 
     struct outsideBet {
         uint num;
@@ -104,41 +104,8 @@ contract Num{
         outNums[num] = number;
 
     }
-}
 
 
-/*　やっぱ乱数発生の指示はjsから出し、乱数生成自体は別言語で書いてそれを呼び出し、それをsolidityに渡すようにしようかな... */
-//乱数生成
-import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
-
-contract RandomNumberOraclized is usingOraclize {
-    uint public randomNumber;
-    bytes32 public request_id;
-
-    //function RandomNumberOraclized() public{
-    // (1) Oraclize Address Resolver の読み込み
-    // <OARアドレスを指定。deterministic OAR の場合、この行の指定は必要ない
-    //OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
-    //}
-
-    function request() public {
-        // (2) OraclizeへWolframAlphaによる計算を依頼
-        // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
-        request_id = oraclize_query("WolframAlpha", "random number between 0 and 36");
-    }
-
-    // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
-    function __callback(bytes32 request_id, string memory result) public {
-        if (msg.sender != oraclize_cbAddress()) {
-            revert();
-        }
-
-        // (4) 実行結果resultをdrawnNumberへ保存
-        randomNumber = parseInt(result);
-    }
-}
-
-contract Transaction is Num {
     /*状態変数の宣言*/
     string public name;         /*tokenの名前*/
     string public symbol;       /*tokenの単位*/
@@ -166,11 +133,11 @@ contract Transaction is Num {
         /*不正送金チェック*/
         if (balanceOf[msg.sender] < _value) {
             return false;
-            revert();
+
         }
         if (balanceOf[_to] + _value < balanceOf[_to]) {
             return false;
-            revert();
+
         }
 
         /*送金アドレスと受信アドレスの残高を更新*/
@@ -181,9 +148,7 @@ contract Transaction is Num {
         emit Transfer(msg.sender, _to, _value);
         return true;
     }
-}
 
-contract Play is Environment, Transaction { //transactionがnumを継承
     struct betInfo {
         string kind;
         uint256 betVal;
