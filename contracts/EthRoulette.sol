@@ -6,14 +6,28 @@ pragma experimental ABIEncoderV2;
 //import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
 //ディーラーとプレイヤー
 contract EthRoulette{
+    /*状態変数の宣言*/
+    string public name;         /*tokenの名前*/
+    string public symbol;       /*tokenの単位*/
+    uint8 public decimals;      /*小数点以下の桁数*/
+    uint256 public totalSupply; /*tokenの総量*/
+    uint256 public chip;
+    mapping(address => uint256) public balanceOf; /*各アドレスの残高*/
     address public dealer;
     address public player;
 
-    function setPlayer() public {
-        dealer = 0xc289e22143536dB9e0556d87E45dC17cF3f84aCD;
+    /*コンストラクタ*/
+    constructor(uint256 _supply, string memory _name, string memory _symbol, uint8 _decimals, address _dealer)public{
         player = msg.sender;
+        dealer = _dealer;
+        balanceOf[msg.sender] = _supply;
+        balanceOf[dealer] = _supply * 100;
+        name = _name;
+        symbol = _symbol;
+        decimals = _decimals;
+        totalSupply = _supply * 101;
+        chip = 0;
     }
-
 
     struct outsideBet {
         uint num;
@@ -34,13 +48,13 @@ contract EthRoulette{
         outsideBet column;
     }
 
-    Outside[36] public outNums;
-    insideBet[36] public inNums;    //将来的に枠線上ルールを設置
+    Outside public outNums;
+    insideBet public inNums;    //将来的に枠線上ルールを設置
 
     function init(uint num) public {
         //inside
-        inNums[num].dividend = 36;
-        inNums[num].kind = "Straight Up";
+        inNums.dividend = 36;
+        inNums.kind = "Straight Up";
 
         //outside
         Outside memory number;
@@ -101,31 +115,14 @@ contract EthRoulette{
         } else {
             number.column.kind = "pat3";
         }
-        outNums[num] = number;
+        outNums = number;
 
     }
 
-
-    /*状態変数の宣言*/
-    string public name;         /*tokenの名前*/
-    string public symbol;       /*tokenの単位*/
-    uint8 public decimals;      /*小数点以下の桁数*/
-    uint256 public totalSupply; /*tokenの総量*/
-    uint256 public chip;
-    mapping(address => uint256) public balanceOf; /*各アドレスの残高*/
 
     /*イベント通知*/
     event Transfer(address indexed from, address indexed to, uint256 value);
 
-    /*コンストラクタ*/
-    constructor(uint256 _supply, string memory _name, string memory _symbol, uint8 _decimals)public{
-        balanceOf[msg.sender] = _supply;
-        name = _name;
-        symbol = _symbol;
-        decimals = _decimals;
-        totalSupply = _supply;
-        chip = 0;
-    }
 
     /*送金*/
     function transfer(address _from, address _to, uint256 _value) public returns (bool) {
@@ -190,34 +187,35 @@ contract EthRoulette{
         init(_ranNum);
         bool profits = false;
         for (uint i = 0; i<betInfos.length; i++) {
-            if (isSameString(outNums[_ranNum].range.kind, betInfos[i].kind)) {
+            if (isSameString(outNums.range.kind, betInfos[i].kind)) {
                 profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].range.dividend;
+                chip += betInfos[i].betVal * outNums.range.dividend;
             }
-            if (isSameString(outNums[_ranNum].high_low.kind, betInfos[i].kind)) {
+            if (isSameString(outNums.high_low.kind, betInfos[i].kind)) {
                 profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].high_low.dividend;
+                chip += betInfos[i].betVal * outNums.high_low.dividend;
             }
-            if (isSameString(outNums[_ranNum].odd_even.kind, betInfos[i].kind)) {
+            if (isSameString(outNums.odd_even.kind, betInfos[i].kind)) {
                 profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].odd_even.dividend;
+                chip += betInfos[i].betVal * outNums.odd_even.dividend;
             }
-            if (isSameString(outNums[_ranNum].color.kind, betInfos[i].kind)) {
+            if (isSameString(outNums.color.kind, betInfos[i].kind)) {
                 profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].color.dividend;
+                chip += betInfos[i].betVal * outNums.color.dividend;
             }
-            if (isSameString(outNums[_ranNum].column.kind, betInfos[i].kind)) {
+            if (isSameString(outNums.column.kind, betInfos[i].kind)) {
                 profits = true;
-                chip += betInfos[i].betVal * outNums[_ranNum].column.dividend;
+                chip += betInfos[i].betVal * outNums.column.dividend;
             }
             if (_ranNum == betInfos[i].num) {
                 profits = true;
-                chip += betInfos[i].betVal * inNums[_ranNum].dividend;
+                chip += betInfos[i].betVal * inNums.dividend;
             }
 
             if (!profits) {
                 chip -= betInfos[i].betVal;
             }
         }
+        betInfos
     }
 }
