@@ -12,7 +12,7 @@ body {
   color: tomato;
 }
 
-.button {
+.button_num {
   display: inline-block;
   position: relative;
   width: 30px;
