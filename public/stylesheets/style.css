@@ -14,9 +14,9 @@ body {
 
 
 .button_num {
+  height: 30px;
   display: inline-block;
   position: relative;
-  height: 30px;
   border: solid 1px #ccc;
   padding: 15px 15px;
   text-align: center;
@@ -38,13 +38,21 @@ body {
 }
 
 .button-range {
-  color: #000000;
+  color: #ffffff;
   width: 90px;
-  background: aliceblue;
+  background: darkgreen;
 }
 
+.button-zero {
+  height: 155px;
+  width: 90px;
+  text-align: right;
+  clip-path: polygon(58% 0%, 100% 0, 100% 100%, 58% 100%, 30% 50%);
+  color: #ffffff;
+  background: darkgreen;
+}
 
-.button-black:hover, .button-range:hover {
+.button-black:hover, .button-range:hover, .button-zero:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#888));
   background-image: -webkit-linear-gradient(top, #aaa, #888);
   background-image: -moz-linear-gradient(top, #aaa, #888);
@@ -54,7 +62,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaa', endColorstr='#888', GradientType=0); /* IE6-9 */
 }
 
-.button-black:active, .button-range:active {
+.button-black:active, .button-range:active, .button-zero:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#888), to(#555));
   background-image: -webkit-linear-gradient(top, #888, #555);
   background-image: -moz-linear-gradient(top, #888, #555);
