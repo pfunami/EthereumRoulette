@@ -216,6 +216,6 @@ contract EthRoulette{
                 chip -= betInfos[i].betVal;
             }
         }
-        betInfos
+        //betInfosの初期化
     }
 }
