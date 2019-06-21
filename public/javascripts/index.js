@@ -551,7 +551,7 @@ if (typeof web3 !== 'undefined') {
 
     contract = web3.eth.contract(abi).at(addr);
 
-    $('#setValueButton').on('click', function () {
+    $('#spin').on('click', function () {
         contract.setValue.sendTransaction($('#setValueText1').val(), $('#setValueText2').val(), {
             from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
             gas: 3000000
