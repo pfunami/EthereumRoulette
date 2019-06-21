@@ -37,10 +37,30 @@ body {
   background: rgb(255, 0, 0);
 }
 
-.button-range {
+.button-column {
   color: #ffffff;
   width: 90px;
   background: darkgreen;
+}
+
+.button-range {
+  color: #ffffff;
+  width: 216px;
+  background: darkgreen;
+}
+
+.other {
+  color: #ffffff;
+  width: 92px;
+  background: darkgreen;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
 }
 
 .button-zero {
@@ -52,7 +72,7 @@ body {
   background: darkgreen;
 }
 
-.button-black:hover, .button-range:hover, .button-zero:hover {
+.button-black:hover, .button-column:hover, .button-zero:hover, .button-range:hover, .other:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#888));
   background-image: -webkit-linear-gradient(top, #aaa, #888);
   background-image: -moz-linear-gradient(top, #aaa, #888);
@@ -62,7 +82,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aaa', endColorstr='#888', GradientType=0); /* IE6-9 */
 }
 
-.button-black:active, .button-range:active, .button-zero:hover {
+.button-black:active, .button-column:active, .button-zero:hover, .button-range:active, .other:active {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#888), to(#555));
   background-image: -webkit-linear-gradient(top, #888, #555);
   background-image: -moz-linear-gradient(top, #888, #555);
