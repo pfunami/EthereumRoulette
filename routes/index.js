@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var RanNum = require('../public/javascripts/makeRanNum');
+var RanNum = require('../public/javascripts/makeRanNum.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,6 +9,5 @@ router.get('/', function(req, res, next) {
 });
 
 
-
-
 module.exports = router;
+

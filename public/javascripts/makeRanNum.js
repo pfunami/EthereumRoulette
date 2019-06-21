@@ -7,7 +7,7 @@ const nBytes = 4;
 const maxValue = 4294967295;
 
 // [0.0, 1.0]区間でセキュアな乱数を生成する
-function secureRandom() {
+exports.secureRandom = function () {
     // nBytesバイトのランダムなバッファを生成する
     const randomBytes = crypto.randomBytes(nBytes);
     // ランダムなバッファを整数値に変換する
