@@ -1,11 +1,37 @@
 pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
-/*　やっぱ乱数発生の指示はjsから出し、乱数生成自体は別言語で書いてそれを呼び出し、それをsolidityに渡すようにしようかな... */
+import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
+
 //乱数生成
 //import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
 //ディーラーとプレイヤー
-contract EthRoulette{
+contract EthRoulette is usingOraclize {
+    uint public randomNumber;
+    bytes32 public request_id;
+
+    //    function RandomNumberOraclized() {
+    //        // (1) Oraclize Address Resolver の読み込み
+    //        // <OARアドレスを指定。deterministic OAR の場合、この行の指定は必要ない
+    //        OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
+    //    }
+
+    function request() {
+        // (2) OraclizeへWolframAlphaによる計算を依頼
+        // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
+        request_id = oraclize_query("WolframAlpha", "random number between 0 and 36");
+    }
+
+    // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
+    function __callback(bytes32 request_id, string result) {
+        if (msg.sender != oraclize_cbAddress()) {
+            throw;
+        }
+
+        // (4) 実行結果resultをdrawnNumberへ保存
+        randomNumber = parseInt(result);
+    }
+
     /*状態変数の宣言*/
     string public name;         /*tokenの名前*/
     string public symbol;       /*tokenの単位*/
@@ -172,7 +198,7 @@ contract EthRoulette{
         }
     }
 
-    function betOut(string memory place, uint number, uint256 betVal) public {//t=in,f=out
+    function betOut(string memory place, uint number, uint256 betVal) public {
         bet_info.kind = place;
         bet_info.betVal = betVal;
         bet_info.num = number;
@@ -183,10 +209,11 @@ contract EthRoulette{
         return keccak256(abi.encodePacked(_origin)) == keccak256(abi.encodePacked(_target));
     }
 
+    uint beginNum = 0;
     function payOut(uint _ranNum) public {
         init(_ranNum);
         bool profits = false;
-        for (uint i = 0; i<betInfos.length; i++) {
+        for (uint i = beginNum; i < betInfos.length; i++) {
             if (isSameString(outNums.range.kind, betInfos[i].kind)) {
                 profits = true;
                 chip += betInfos[i].betVal * outNums.range.dividend;
@@ -216,6 +243,6 @@ contract EthRoulette{
                 chip -= betInfos[i].betVal;
             }
         }
-        //betInfosの初期化
+        beginNum = betInfos.length; //初期化したかったけど難しそう
     }
 }
