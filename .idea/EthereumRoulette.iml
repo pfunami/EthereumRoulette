@@ -14,10 +14,12 @@
         <CLASSES>
           <root url="file:///usr/local/bin/lib" />
         </CLASSES>
-        <JAVADOC />
         <SOURCES />
         <jarDirectory url="file:///usr/local/bin/lib" recursive="true" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="react" level="application" />
+    <orderEntry type="library" name="browser" level="application" />
+    <orderEntry type="library" name="react-dom" level="application" />
   </component>
 </module>
