@@ -12,7 +12,8 @@ if (typeof web3 !== 'undefined') {
         console.log('Your accounts: ' + account);
     });
 
-    let addr = "0x9dd1e8169e76a9226b07ab9f85cc20a5e1ed44dd";
+    // let addr = "0xd91cf89c78bf2980e01c2ab83ed2779fa0440fdd";
+    let addr = "0xf5391d0330fbb45c8dc33a72abccd36286470b35";
     let abi = [
         {
             "constant": false,
@@ -276,6 +277,20 @@ if (typeof web3 !== 'undefined') {
         {
             "constant": true,
             "inputs": [],
+            "name": "getChipVal",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
             "name": "inNums",
             "outputs": [
                 {
@@ -484,9 +499,39 @@ if (typeof web3 !== 'undefined') {
         });
 
         $('#output').text(random.toString());
-
     });
+    // $('#1').on('click', function () {
+    //     contract.getChipVal.call((error, result) => {
+    //         $('#output').text(result);
+    //     });
+    // });
 
+    let getBalance = function () {
+        contract.balanceOf.call(account, (error, result) => {
+            $('#balance').text(result);
+        });
+    };
+
+    let getChipVal = function () {
+        contract.getChipVal.call((error, result) => {
+            $('#chipNum').text(result);
+        });
+    };
+    setInterval(getChipVal, 1000);
+    setInterval(getBalance, 1000);
+
+    $('#buyChip').on('click', function () {
+        contract.buyChip.sendTransaction($('#inputEth').val(), {
+            from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
+            gas: 3000000
+        }, (error, result) => {
+            console.log($('#inputEth').val());
+            console.log('Transaction Hash : ' + result);
+        });
+        contract.getChipVal.call((error, result) => {
+            $('#chipNum').text(result);
+        });
+    });
 
     // $('#getValue1Button').on('click', function () {
     //     contract.getValue1.call($('#getValue1Text').val(), (error, result) => {
@@ -512,7 +557,7 @@ if (typeof web3 !== 'undefined') {
     // });
     //
     // $('#getValue1Button').on('click', function () {
-    //     contract.getValue1.call($('#getValue1Text').val(), (error, result) => {
+    //      contract.getValue1.call($('#getValue1Text').val(), (error, result) => {
     //         $('#call_value1').text('Value1 : ' + result)
     //     });
     // });

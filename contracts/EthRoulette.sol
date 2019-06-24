@@ -124,25 +124,17 @@ contract EthRoulette {
 
 
     /*送金*/
-    function transfer(address _from, address _to, uint _value) public returns (bool) {
-
+    function transfer(address _from, address _to, uint _value) public {
         /*不正送金チェック*/
-        if (balanceOf[msg.sender] < _value) {
-            return false;
-
-        }
-        if (balanceOf[_to] + _value < balanceOf[_to]) {
-            return false;
-
-        }
+        if (balanceOf[_from] < _value) revert();
+        if (balanceOf[_to] + _value < balanceOf[_to]) revert();
 
         /*送金アドレスと受信アドレスの残高を更新*/
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;
 
         /*イベント通知*/
-        emit Transfer(msg.sender, _to, _value);
-        return true;
+        emit Transfer(_from, _to, _value);
     }
 
     struct betInfo {
@@ -158,14 +150,14 @@ contract EthRoulette {
     event ExchangeChip(uint exchangeChip, uint allChip, uint value);
 
     function buyChip(uint _val) public {
-        if (transfer(player, dealer, _val)) {
-            chip += _val;
-            emit GetChip(_val, chip, balanceOf[player]);
-        }
+        transfer(player, dealer, _val);
+        chip += _val;
+        emit GetChip(_val, chip, balanceOf[player]);
     }
 
     function exchangeChip(uint _exChip) public {
-        if (_exChip <= chip && transfer(dealer, player, _exChip)) {
+        if (_exChip <= chip) {
+            transfer(dealer, player, _exChip);
             chip -= _exChip;
             emit ExchangeChip(_exChip, chip, balanceOf[player]);
         }
@@ -217,5 +209,11 @@ contract EthRoulette {
             }
         }
         beginNum = betInfos.length; //初期化したかったけど難しそう
+    }
+
+
+    //値取得関連
+    function getChipVal() public view returns (uint){
+        return chip;
     }
 }

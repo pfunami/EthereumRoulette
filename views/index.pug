@@ -4,6 +4,16 @@ block content
   h1= title
   p Welcome to #{title}
 
+  br
+  p.text2 balance:
+  #balance.balanceText
+  br
+  p.text Your chip:
+  #chipNum.chipText
+  input#inputEth(placeholder='Input your ETH')
+  #buyChip.btn-flat-border Buy Chip
+
+  p
   table
     tbody
       tr
