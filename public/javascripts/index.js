@@ -4,56 +4,16 @@ if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider);
     ethereum.enable();
     web3.version.getNetwork((error, result) => {
-        $('#networkid').text('Network ID: ' + result)
+        console.log('Network ID: ' + result)
     });
     var account;
     web3.eth.getAccounts((error, result) => {
         account = result[0];
-        $('#accounts').text('Your accounts: ' + account);
+        console.log('Your accounts: ' + account);
     });
 
-    let addr = 0x692a70d2e424a56d2c6c27aa97d1a86395877b3a;
+    let addr = "0x9dd1e8169e76a9226b07ab9f85cc20a5e1ed44dd";
     let abi = [
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "request_id",
-                    "type": "bytes32"
-                },
-                {
-                    "name": "result",
-                    "type": "string"
-                }
-            ],
-            "name": "__callback",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_myid",
-                    "type": "bytes32"
-                },
-                {
-                    "name": "_result",
-                    "type": "string"
-                },
-                {
-                    "name": "_proof",
-                    "type": "bytes"
-                }
-            ],
-            "name": "__callback",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
         {
             "constant": false,
             "inputs": [
@@ -134,15 +94,6 @@ if (typeof web3 !== 'undefined') {
         },
         {
             "constant": false,
-            "inputs": [],
-            "name": "request",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
             "inputs": [
                 {
                     "name": "_from",
@@ -184,7 +135,7 @@ if (typeof web3 !== 'undefined') {
                 },
                 {
                     "name": "_decimals",
-                    "type": "uint8"
+                    "type": "uint256"
                 },
                 {
                     "name": "_dealer",
@@ -315,7 +266,7 @@ if (typeof web3 !== 'undefined') {
             "outputs": [
                 {
                     "name": "",
-                    "type": "uint8"
+                    "type": "uint256"
                 }
             ],
             "payable": false,
@@ -494,34 +445,6 @@ if (typeof web3 !== 'undefined') {
         {
             "constant": true,
             "inputs": [],
-            "name": "randomNumber",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "request_id",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "bytes32"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
             "name": "symbol",
             "outputs": [
                 {
@@ -547,31 +470,58 @@ if (typeof web3 !== 'undefined') {
             "stateMutability": "view",
             "type": "function"
         }
-    ]
+    ];
 
-    contract = web3.eth.contract(abi).at(addr);
+    let contract = web3.eth.contract(abi).at(addr);
 
     $('#spin').on('click', function () {
-        contract.setValue.sendTransaction($('#setValueText1').val(), $('#setValueText2').val(), {
+        let random = Math.floor(Math.random() * 37);    //0~36
+        contract.payOut.sendTransaction(random, {
             from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
             gas: 3000000
         }, (error, result) => {
-            $('#tx_hsh').text('Transaction Hash : ' + result);
+            console.log('Transaction Hash : ' + result);
         });
+
+        $('#output').text(random.toString());
+
     });
 
-    $('#getValue1Button').on('click', function () {
-        contract.getValue1.call($('#getValue1Text').val(), (error, result) => {
-            $('#call_value1').text('Value1 : ' + result)
-        });
-    });
 
-    $('#getValue2Button').on('click', function () {
-        contract.getValue2.call($('#getValue2Text').val(), (error, result) => {
-            $('#call_value2').text('Value2 : ' + result)
-        });
-    });
+    // $('#getValue1Button').on('click', function () {
+    //     contract.getValue1.call($('#getValue1Text').val(), (error, result) => {
+    //         $('#call_value1').text('Value1 : ' + result)
+    //     });
+    // });
+    //
+    // $('#getValue2Button').on('click', function () {
+    //     contract.getValue2.call($('#getValue2Text').val(), (error, result) => {
+    //         $('#call_value2').text('Value2 : ' + result)
+    //     });
+    // });
 
+
+    // $('#spin').on('click', function () {
+    //
+    //     contract.setValue.sendTransaction($('#setValueText1').val(), $('#setValueText2').val(), {
+    //         from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
+    //         gas: 3000000
+    //     }, (error, result) => {
+    //         $('#tx_hsh').text('Transaction Hash : ' + result);
+    //     });
+    // });
+    //
+    // $('#getValue1Button').on('click', function () {
+    //     contract.getValue1.call($('#getValue1Text').val(), (error, result) => {
+    //         $('#call_value1').text('Value1 : ' + result)
+    //     });
+    // });
+    //
+    // $('#getValue2Button').on('click', function () {
+    //     contract.getValue2.call($('#getValue2Text').val(), (error, result) => {
+    //         $('#call_value2').text('Value2 : ' + result)
+    //     });
+    // });
 
 } else {
     document.write('Install <a href="https://metamask.io">METAMASK</a>')

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{browser, react, react-dom}" />
+    <file url="PROJECT" libraries="{browser, jquery-3.4.0, react, react-dom}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>

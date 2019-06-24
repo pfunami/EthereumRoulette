@@ -1,49 +1,22 @@
 pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
-import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
 
-//乱数生成
-//import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
 //ディーラーとプレイヤー
-contract EthRoulette is usingOraclize {
-    uint public randomNumber;
-    bytes32 public request_id;
-
-    //    function RandomNumberOraclized() {
-    //        // (1) Oraclize Address Resolver の読み込み
-    //        // <OARアドレスを指定。deterministic OAR の場合、この行の指定は必要ない
-    //        OAR = OraclizeAddrResolverI(0x45831C2e2e081F7373003502D1D490e62b09A0dD);
-    //    }
-
-    function request() {
-        // (2) OraclizeへWolframAlphaによる計算を依頼
-        // デバッグのため、request_idにOraclizeへの処理依頼番号を保存しておきます
-        request_id = oraclize_query("WolframAlpha", "random number between 0 and 36");
-    }
-
-    // (3) Oraclize側で外部処理が実行されると、この__callback関数を呼び出してくれる
-    function __callback(bytes32 request_id, string result) {
-        if (msg.sender != oraclize_cbAddress()) {
-            throw;
-        }
-
-        // (4) 実行結果resultをdrawnNumberへ保存
-        randomNumber = parseInt(result);
-    }
+contract EthRoulette {
 
     /*状態変数の宣言*/
     string public name;         /*tokenの名前*/
     string public symbol;       /*tokenの単位*/
-    uint8 public decimals;      /*小数点以下の桁数*/
-    uint256 public totalSupply; /*tokenの総量*/
-    uint256 public chip;
-    mapping(address => uint256) public balanceOf; /*各アドレスの残高*/
+    uint public decimals;      /*小数点以下の桁数*/
+    uint public totalSupply; /*tokenの総量*/
+    uint public chip;
+    mapping(address => uint) public balanceOf; /*各アドレスの残高*/
     address public dealer;
     address public player;
 
     /*コンストラクタ*/
-    constructor(uint256 _supply, string memory _name, string memory _symbol, uint8 _decimals, address _dealer)public{
+    constructor(uint _supply, string memory _name, string memory _symbol, uint _decimals, address _dealer)public{
         player = msg.sender;
         dealer = _dealer;
         balanceOf[msg.sender] = _supply;
@@ -58,12 +31,12 @@ contract EthRoulette is usingOraclize {
     struct outsideBet {
         uint num;
         string kind;
-        uint256 dividend;
+        uint dividend;
     }
 
     struct insideBet {
         string kind;
-        uint256 dividend;
+        uint dividend;
     }
 
     struct Outside {
@@ -147,11 +120,11 @@ contract EthRoulette is usingOraclize {
 
 
     /*イベント通知*/
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Transfer(address indexed from, address indexed to, uint value);
 
 
     /*送金*/
-    function transfer(address _from, address _to, uint256 _value) public returns (bool) {
+    function transfer(address _from, address _to, uint _value) public returns (bool) {
 
         /*不正送金チェック*/
         if (balanceOf[msg.sender] < _value) {
@@ -174,31 +147,31 @@ contract EthRoulette is usingOraclize {
 
     struct betInfo {
         string kind;
-        uint256 betVal;
+        uint betVal;
         uint num;
     }
 
     betInfo bet_info;
     betInfo[] betInfos;
     /*イベント通知*/
-    event GetChip(uint256 getChip, uint256 allChip, uint256 value);
-    event ExchangeChip(uint256 exchangeChip, uint256 allChip, uint256 value);
+    event GetChip(uint getChip, uint allChip, uint value);
+    event ExchangeChip(uint exchangeChip, uint allChip, uint value);
 
-    function buyChip(uint256 _val) public {
+    function buyChip(uint _val) public {
         if (transfer(player, dealer, _val)) {
             chip += _val;
             emit GetChip(_val, chip, balanceOf[player]);
         }
     }
 
-    function exchangeChip(uint256 _exChip) public {
+    function exchangeChip(uint _exChip) public {
         if (_exChip <= chip && transfer(dealer, player, _exChip)) {
             chip -= _exChip;
             emit ExchangeChip(_exChip, chip, balanceOf[player]);
         }
     }
 
-    function betOut(string memory place, uint number, uint256 betVal) public {
+    function betOut(string memory place, uint number, uint betVal) public {
         bet_info.kind = place;
         bet_info.betVal = betVal;
         bet_info.num = number;
@@ -209,11 +182,11 @@ contract EthRoulette is usingOraclize {
         return keccak256(abi.encodePacked(_origin)) == keccak256(abi.encodePacked(_target));
     }
 
-    uint beginNum = 0;
+    uint256 beginNum = 0;
     function payOut(uint _ranNum) public {
         init(_ranNum);
         bool profits = false;
-        for (uint i = beginNum; i < betInfos.length; i++) {
+        for (uint256 i = beginNum; i < betInfos.length; i++) {
             if (isSameString(outNums.range.kind, betInfos[i].kind)) {
                 profits = true;
                 chip += betInfos[i].betVal * outNums.range.dividend;
