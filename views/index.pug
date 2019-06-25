@@ -11,7 +11,9 @@ block content
   p.text Your chip:
   #chipNum.chipText
   input#inputEth(placeholder='Input your ETH')
-  #buyChip.btn-flat-border Buy Chip
+  #buyChip.btn-flat-border.eth Buy Chip
+  input#inputChip(placeholder='Input your Chip')
+  #exchangeChip.btn-flat-border.chip Exchange Chip
 
   p
   table
@@ -90,7 +92,6 @@ block content
   br
   h2="RESULT:"
 
-  #output
+  #output.chipText
 
   script(type='text/javascript', src='/javascripts/index.js')
-

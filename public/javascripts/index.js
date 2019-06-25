@@ -13,219 +13,16 @@ if (typeof web3 !== 'undefined') {
     });
 
     // let addr = "0xd91cf89c78bf2980e01c2ab83ed2779fa0440fdd";
-    let addr = "0xf5391d0330fbb45c8dc33a72abccd36286470b35";
+    let addr = "0x29e65da4133996cbe3122930b4dc82f5a2efef64";
     let abi = [
         {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "place",
-                    "type": "string"
-                },
-                {
-                    "name": "number",
-                    "type": "uint256"
-                },
-                {
-                    "name": "betVal",
-                    "type": "uint256"
-                }
-            ],
-            "name": "betOut",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_val",
-                    "type": "uint256"
-                }
-            ],
-            "name": "buyChip",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_exChip",
-                    "type": "uint256"
-                }
-            ],
-            "name": "exchangeChip",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "num",
-                    "type": "uint256"
-                }
-            ],
-            "name": "init",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_ranNum",
-                    "type": "uint256"
-                }
-            ],
-            "name": "payOut",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_from",
-                    "type": "address"
-                },
-                {
-                    "name": "_to",
-                    "type": "address"
-                },
-                {
-                    "name": "_value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transfer",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "name": "_supply",
-                    "type": "uint256"
-                },
-                {
-                    "name": "_name",
-                    "type": "string"
-                },
-                {
-                    "name": "_symbol",
-                    "type": "string"
-                },
-                {
-                    "name": "_decimals",
-                    "type": "uint256"
-                },
-                {
-                    "name": "_dealer",
-                    "type": "address"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "name": "from",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "name": "to",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "Transfer",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "name": "getChip",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "name": "allChip",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "GetChip",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "name": "exchangeChip",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "name": "allChip",
-                    "type": "uint256"
-                },
-                {
-                    "indexed": false,
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "ExchangeChip",
-            "type": "event"
-        },
-        {
             "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "balanceOf",
+            "inputs": [],
+            "name": "name",
             "outputs": [
                 {
                     "name": "",
-                    "type": "uint256"
+                    "type": "string"
                 }
             ],
             "payable": false,
@@ -235,35 +32,7 @@ if (typeof web3 !== 'undefined') {
         {
             "constant": true,
             "inputs": [],
-            "name": "chip",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "dealer",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "decimals",
+            "name": "totalSupply",
             "outputs": [
                 {
                     "name": "",
@@ -289,16 +58,26 @@ if (typeof web3 !== 'undefined') {
             "type": "function"
         },
         {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_exChip",
+                    "type": "uint256"
+                }
+            ],
+            "name": "exchangeChip",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "constant": true,
             "inputs": [],
-            "name": "inNums",
+            "name": "decimals",
             "outputs": [
                 {
-                    "name": "kind",
-                    "type": "string"
-                },
-                {
-                    "name": "dividend",
+                    "name": "",
                     "type": "uint256"
                 }
             ],
@@ -332,7 +111,72 @@ if (typeof web3 !== 'undefined') {
         {
             "constant": true,
             "inputs": [],
-            "name": "name",
+            "name": "player",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "inNums",
+            "outputs": [
+                {
+                    "name": "kind",
+                    "type": "string"
+                },
+                {
+                    "name": "dividend",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_val",
+                    "type": "uint256"
+                }
+            ],
+            "name": "buyChip",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "balanceOf",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "symbol",
             "outputs": [
                 {
                     "name": "",
@@ -341,6 +185,70 @@ if (typeof web3 !== 'undefined') {
             ],
             "payable": false,
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "dealer",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "chip",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "num",
+                    "type": "uint256"
+                }
+            ],
+            "name": "init",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_from",
+                    "type": "address"
+                },
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -444,46 +352,133 @@ if (typeof web3 !== 'undefined') {
             "type": "function"
         },
         {
-            "constant": true,
-            "inputs": [],
-            "name": "player",
-            "outputs": [
+            "constant": false,
+            "inputs": [
                 {
-                    "name": "",
+                    "name": "place",
+                    "type": "string"
+                },
+                {
+                    "name": "number",
+                    "type": "uint256"
+                },
+                {
+                    "name": "betVal",
+                    "type": "uint256"
+                }
+            ],
+            "name": "betOut",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_ranNum",
+                    "type": "uint256"
+                }
+            ],
+            "name": "payOut",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "name": "_supply",
+                    "type": "uint256"
+                },
+                {
+                    "name": "_name",
+                    "type": "string"
+                },
+                {
+                    "name": "_symbol",
+                    "type": "string"
+                },
+                {
+                    "name": "_decimals",
+                    "type": "uint256"
+                },
+                {
+                    "name": "_dealer",
                     "type": "address"
                 }
             ],
             "payable": false,
-            "stateMutability": "view",
-            "type": "function"
+            "stateMutability": "nonpayable",
+            "type": "constructor"
         },
         {
-            "constant": true,
-            "inputs": [],
-            "name": "symbol",
-            "outputs": [
+            "anonymous": false,
+            "inputs": [
                 {
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "totalSupply",
-            "outputs": [
+                    "indexed": true,
+                    "name": "from",
+                    "type": "address"
+                },
                 {
-                    "name": "",
+                    "indexed": true,
+                    "name": "to",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "value",
                     "type": "uint256"
                 }
             ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
+            "name": "Transfer",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "name": "getChip",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "name": "allChip",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "GetChip",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "name": "exchangeChip",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "name": "allChip",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "ExchangeChip",
+            "type": "event"
         }
     ];
 
@@ -496,9 +491,8 @@ if (typeof web3 !== 'undefined') {
             gas: 3000000
         }, (error, result) => {
             console.log('Transaction Hash : ' + result);
+            $('#output').text(random.toString());
         });
-
-        $('#output').text(random.toString());
     });
     // $('#1').on('click', function () {
     //     contract.getChipVal.call((error, result) => {
@@ -509,6 +503,10 @@ if (typeof web3 !== 'undefined') {
     let getBalance = function () {
         contract.balanceOf.call(account, (error, result) => {
             $('#balance').text(result);
+        });
+        let dealer = "0xc289e22143536dB9e0556d87E45dC17cF3f84aCD"
+        contract.balanceOf.call(dealer, (error, result) => {
+            console.log('Dealer Balance: ' + result);
         });
     };
 
@@ -525,11 +523,16 @@ if (typeof web3 !== 'undefined') {
             from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
             gas: 3000000
         }, (error, result) => {
-            console.log($('#inputEth').val());
             console.log('Transaction Hash : ' + result);
         });
-        contract.getChipVal.call((error, result) => {
-            $('#chipNum').text(result);
+    });
+
+    $('#exchangeChip').on('click', function () {
+        contract.exchangeChip.sendTransaction($('#inputChip').val(), {
+            from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
+            gas: 3000000
+        }, (error, result) => {
+            console.log('Transaction Hash : ' + result);
         });
     });
 
@@ -567,6 +570,40 @@ if (typeof web3 !== 'undefined') {
     //         $('#call_value2').text('Value2 : ' + result)
     //     });
     // });
+
+
+    function disp(place, num) {
+        let betVal = window.prompt("賭け額を入力してください", "");
+
+        if (betVal === '' || isNaN(betVal.valueOf())) {
+            window.alert('数値を入力してください')
+        } else {
+            contract.betOut.sendTransaction(place, num, betVal.valueOf(), {
+                from: "0x937be33cc76117b967d33966099c81b2d1a9a383",
+                gas: 3000000
+            }, (error, result) => {
+                console.log('Transaction Hash : ' + result);
+            });
+        }
+
+    }
+
+    $('.button_num.button-red, .button_num.button-black').on('click', function () {
+        let id = $(this).attr("id");
+        disp("Straight Up", id.valueOf());
+        $(this).append('<div class="ethcoin" id="coin"><img src="/images/ethcoin.png" alt="eth coin" height="50"></div>');
+    });
+    $('.button_num.button-zero').on('click', function () {
+        disp("Straight Up", 0);
+        $(this).append('<div class="ethcoin" id="coin"><img src="/images/ethcoin.png" alt="eth coin" height="50"></div>');
+    });
+
+
+    $('.button_num.button-column, .button_num.button-range, .button_num.other, .button_num.other.red, .button_num.other.black').on('click', function () {
+        let id = $(this).attr("id");
+        disp(id, 37);
+        $(this).append('<div class="ethcoin" id="coin"><img src="/images/ethcoin.png" alt="eth coin" height="50"></div>');
+    });
 
 } else {
     document.write('Install <a href="https://metamask.io">METAMASK</a>')

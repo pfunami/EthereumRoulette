@@ -48,18 +48,32 @@ body {
 
 .btn-flat-border {
     margin-left: 10px;
+    margin-right: 50px;
     display: inline-block;
     padding: 0.3em 1em;
     text-decoration: none;
-    color: #4c46dd;
-    border: solid 2px #4c46dd;
     border-radius: 3px;
     transition: .4s;
 }
 
-.btn-flat-border:hover {
+.btn-flat-border.eth:hover {
     background: #4c46dd;
     color: white;
+}
+
+.btn-flat-border.chip:hover {
+    background: #5bdd55;
+    color: white;
+}
+
+.chip{
+    color: #5bdd55;
+    border: solid 2px #5bdd55;
+}
+
+.eth{
+    color: #4c46dd;
+    border: solid 2px #4c46dd;
 }
 
 .balanceText {
@@ -234,4 +248,17 @@ body {
     background-image: -o-linear-gradient(top, #497991, #31576a);
     background-image: linear-gradient(top, #497991, #31576a);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#497991', endColorstr='#31576a', GradientType=0); /* IE6-9 */
+}
+
+.ethcoin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 40%;
+    left: 40%;
 }

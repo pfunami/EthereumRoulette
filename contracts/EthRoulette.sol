@@ -11,6 +11,7 @@ contract EthRoulette {
     uint public decimals;      /*小数点以下の桁数*/
     uint public totalSupply; /*tokenの総量*/
     uint public chip;
+    uint public betValAll;
     mapping(address => uint) public balanceOf; /*各アドレスの残高*/
     address public dealer;
     address public player;
@@ -26,6 +27,7 @@ contract EthRoulette {
         decimals = _decimals;
         totalSupply = _supply * 101;
         chip = 0;
+        betValAll=0;
     }
 
     struct outsideBet {
@@ -164,10 +166,15 @@ contract EthRoulette {
     }
 
     function betOut(string memory place, uint number, uint betVal) public {
-        bet_info.kind = place;
-        bet_info.betVal = betVal;
-        bet_info.num = number;
-        betInfos.push(bet_info);
+        if (betVal <= chip) {
+            bet_info.kind = place;
+            bet_info.betVal = betVal;
+            bet_info.num = number;
+            betInfos.push(bet_info);
+            betValAll+=betVal;
+        } else {
+            revert();
+        }
     }
 
     function isSameString(string memory _origin, string memory _target) public pure returns (bool) {
@@ -209,11 +216,15 @@ contract EthRoulette {
             }
         }
         beginNum = betInfos.length; //初期化したかったけど難しそう
+        betValAll=0;
     }
 
 
     //値取得関連
     function getChipVal() public view returns (uint){
         return chip;
+    }
+    function getBetValAll() public view returns (uint){
+        return betValAll;
     }
 }
