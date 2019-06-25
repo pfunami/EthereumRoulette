@@ -15,19 +15,25 @@ contract EthRoulette {
     mapping(address => uint) public balanceOf; /*各アドレスの残高*/
     address public dealer;
     address public player;
+    mapping(uint => uint)public mustPay;
+    uint public key;
+    uint public payed;
 
     /*コンストラクタ*/
     constructor(uint _supply, string memory _name, string memory _symbol, uint _decimals, address _dealer)public{
         player = msg.sender;
         dealer = _dealer;
-        balanceOf[msg.sender] = _supply;
-        balanceOf[dealer] = _supply * 100;
+        balanceOf[msg.sender] = msg.sender.balance;
+        balanceOf[dealer] = dealer.balance;
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
-        totalSupply = _supply * 101;
+        totalSupply = msg.sender.balance + dealer.balance;
         chip = 0;
         betValAll=0;
+        key = 0;
+        mustPay[key] = 0;
+        payed = 0;
     }
 
     struct outsideBet {
@@ -120,7 +126,6 @@ contract EthRoulette {
 
     }
 
-
     /*イベント通知*/
     event Transfer(address indexed from, address indexed to, uint value);
 
@@ -152,15 +157,17 @@ contract EthRoulette {
     event ExchangeChip(uint exchangeChip, uint allChip, uint value);
 
     function buyChip(uint _val) public {
-        transfer(player, dealer, _val);
+        //        transfer(player, dealer, _val);
         chip += _val;
         emit GetChip(_val, chip, balanceOf[player]);
     }
 
     function exchangeChip(uint _exChip) public {
         if (_exChip <= chip) {
-            transfer(dealer, player, _exChip*19/20);
+            //            transfer(dealer, player, _exChip*19/20);
             chip -= _exChip;
+            mustPay[key] = _exChip;
+            key += 1;
             emit ExchangeChip(_exChip, chip, balanceOf[player]);
         }
     }
@@ -226,5 +233,14 @@ contract EthRoulette {
     }
     function getBetValAll() public view returns (uint){
         return betValAll;
+    }
+
+    function getMustPayAd() public returns (uint){
+        if (payed < key) {
+            payed += 1;
+            return mustPay[payed-1];
+        } else {
+            revert();
+        }
     }
 }
