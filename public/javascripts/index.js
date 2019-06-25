@@ -13,7 +13,7 @@ if (typeof web3 !== 'undefined') {
     });
 
     // let addr = "0xd91cf89c78bf2980e01c2ab83ed2779fa0440fdd";
-    let addr = "0x2d956394122d52b5825ad2d4b2fade930a4bc1ec";
+    let addr = "0x1eb311887834530dc9dccc4491e0a76dfc8fac59";
     let abi = [
         {
             "constant": false,
@@ -522,11 +522,7 @@ if (typeof web3 !== 'undefined') {
             $('#output').text(random.toString());
         });
     });
-    // $('#1').on('click', function () {
-    //     contract.getChipVal.call((error, result) => {
-    //         $('#output').text(result);
-    //     });
-    // });
+
 
     let getBalance = function () {
         contract.balanceOf.call(account, (error, result) => {
@@ -603,12 +599,19 @@ if (typeof web3 !== 'undefined') {
 
     function getBetValAll() {
         contract.getBetValAll.call((error, result) => {
+            // if (result.valueOf() === 0) {
+            //     console.log("!!!!!!!!!");
+            //     $('.ethcoin').remove();
+            // }else
             if (result.valueOf() !== betValAll) {
                 for (let i = startingPos; i < dispPos.length; i++) {
                     $(dispPos[i]).append('<div class="ethcoin" id="coin"><img src="/images/ethcoin.png" alt="eth coin" height="50"></div>');
                 }
                 startingPos = dispPos.length;
                 betValAll = result.valueOf();
+            }
+            if (betValAll == 0) {
+                $('.ethcoin').remove();
             }
         });
     }
