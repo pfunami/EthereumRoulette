@@ -159,7 +159,7 @@ contract EthRoulette {
 
     function exchangeChip(uint _exChip) public {
         if (_exChip <= chip) {
-            transfer(dealer, player, _exChip);
+            transfer(dealer, player, _exChip*19/20);
             chip -= _exChip;
             emit ExchangeChip(_exChip, chip, balanceOf[player]);
         }

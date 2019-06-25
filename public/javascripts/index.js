@@ -582,7 +582,6 @@ if (typeof web3 !== 'undefined') {
 
     let betValAll = 0;
 
-
     let dispPos = [];
     let startingPos = 0;
     $('.button_num.button-red, .button_num.button-black').on('click', function () {
@@ -599,7 +598,7 @@ if (typeof web3 !== 'undefined') {
     $('.button_num.button-column, .button_num.button-range, .button_num.other, .button_num.other.red, .button_num.other.black').on('click', function () {
         let id = $(this).attr("id");
         disp(id, 37);
-        $(this).append('<div class="ethcoin" id="coin"><img src="/images/ethcoin.png" alt="eth coin" height="50"></div>');
+        dispPos.push(this);
     });
 
     function getBetValAll() {
@@ -613,7 +612,6 @@ if (typeof web3 !== 'undefined') {
             }
         });
     }
-
     setInterval(getBetValAll, 1000);
 } else {
     document.write('Install <a href="https://metamask.io">METAMASK</a>')
