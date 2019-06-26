@@ -13,7 +13,7 @@ if (typeof web3 !== 'undefined') {
         console.log('Your accounts: ' + account);
     });
 
-    let addr = "0x0ca430128d017bff36154dacc761437da3e429f2";
+    let addr = "0x0dc6ab1ca642b4f46021c7ed62c1b665015e77cc";
     let abi = [
         {
             "constant": true,
@@ -111,7 +111,7 @@ if (typeof web3 !== 'undefined') {
         {
             "constant": true,
             "inputs": [],
-            "name": "key",
+            "name": "mustPay",
             "outputs": [
                 {
                     "name": "",
@@ -180,39 +180,6 @@ if (typeof web3 !== 'undefined') {
             ],
             "payable": false,
             "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "payed",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "mustPay",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
             "type": "function"
         },
         {

@@ -15,9 +15,8 @@ contract EthRoulette {
     mapping(address => uint) public balanceOf; /*各アドレスの残高*/
     address public dealer;
     address public player;
-    mapping(uint => uint)public mustPay;
-    uint public key;
-    uint public payed;
+    uint public mustPay;
+    bool yetPay;
 
     /*コンストラクタ*/
     constructor(uint _supply, string memory _name, string memory _symbol, uint _decimals, address _dealer)public{
@@ -31,9 +30,8 @@ contract EthRoulette {
         totalSupply = msg.sender.balance + dealer.balance;
         chip = 0;
         betValAll=0;
-        key = 0;
-        mustPay[key] = 0;
-        payed = 0;
+        yetPay=false;
+        mustPay = 0;
     }
 
     struct outsideBet {
@@ -166,8 +164,8 @@ contract EthRoulette {
         if (_exChip <= chip) {
             //            transfer(dealer, player, _exChip*19/20);
             chip -= _exChip;
-            mustPay[key] = _exChip;
-            key += 1;
+            yetPay=true;
+            mustPay=_exChip;
             emit ExchangeChip(_exChip, chip, balanceOf[player]);
         }
     }
@@ -236,11 +234,11 @@ contract EthRoulette {
     }
 
     function getMustPayAd() public returns (uint){
-        if (payed < key) {
-            payed += 1;
-            return mustPay[payed-1];
+        if (yetPay) {
+            yetPay=false;
+            return mustPay;
         } else {
-            revert();
+            return 0;
         }
     }
 }

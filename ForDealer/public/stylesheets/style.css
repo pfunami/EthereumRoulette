@@ -6,3 +6,22 @@ body {
 a {
   color: #00B7FF;
 }
+
+
+.btn-flat-border {
+  margin-left: 10px;
+  margin-right: 50px;
+  display: inline-block;
+  padding: 0.3em 1em;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: .4s;
+}
+.eth{
+  color: #4c46dd;
+  border: solid 2px #4c46dd;
+}
+.btn-flat-border.eth:hover {
+  background: #4c46dd;
+  color: white;
+}

@@ -14,7 +14,7 @@ if (typeof web3 !== 'undefined') {
     });
 
     // let addr = "0xd91cf89c78bf2980e01c2ab83ed2779fa0440fdd";
-    let addr = "0x0ca430128d017bff36154dacc761437da3e429f2";
+    let addr = "0x0dc6ab1ca642b4f46021c7ed62c1b665015e77cc";
     let abi = [
         {
             "constant": true,
@@ -112,7 +112,7 @@ if (typeof web3 !== 'undefined') {
         {
             "constant": true,
             "inputs": [],
-            "name": "key",
+            "name": "mustPay",
             "outputs": [
                 {
                     "name": "",
@@ -181,39 +181,6 @@ if (typeof web3 !== 'undefined') {
             ],
             "payable": false,
             "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "payed",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "mustPay",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -573,22 +540,20 @@ if (typeof web3 !== 'undefined') {
     ];
 
     let contract = web3.eth.contract(abi).at(addr);
-
-    function getMustPay() {
-        contract.getMustPay.call((error, result) => {
-            if (result.valueOf() != 0) {
-                web3.eth.sendTransaction({
-                    from: "0xc289e22143536dB9e0556d87E45dC17cF3f84aCD",
-                    to: "0x937be33cc76117b967d33966099c81b2d1a9a383",
-                    value: result.valueOf() * 0.95
-                }, (error, balance) => {
-                    console.log(balance);
-                });
-            }
+    $('#pay').on('click', function () {
+        console.log("balance");
+        contract.getMustPayAd.call((error, result) => {
+            console.log(result.valueOf());
+            web3.eth.sendTransaction({
+                from: "0xc289e22143536dB9e0556d87E45dC17cF3f84aCD",
+                to: "0x937be33cc76117b967d33966099c81b2d1a9a383",
+                value: result.valueOf() * 0.95
+            }, (error, balance) => {
+                console.log(balance);
+            });
         });
-    }
+    });
 
-    setInterval(getMustPay, 1000);
 } else {
     document.write('Install <a href="https://metamask.io">METAMASK</a>')
 }
