@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "clean-css": ">=4.1.11",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
@@ -14,5 +15,6 @@
     "morgan": "~1.9.1",
     "pug": "^2.0.4",
     "web3": "^1.0.0-beta.55"
-  }
+  },
+
 }
